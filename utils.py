@@ -34,6 +34,7 @@ class GameColor(Enum):
     SNAKE = (0, 255, 0)
     FOOD = (255, 0, 0)
     BACKGROUND = (0, 0, 0)
+    PATH = (50, 50, 50)
 
 class Position:
     def __init__(self, x, y):
@@ -49,6 +50,21 @@ class Position:
             return Position(self.x + 1, self.y)
         elif direction == Direction.WEST:
             return Position(self.x - 1, self.y)
+        
+    def direction_of(self, position) -> Direction:
+        if self.x == position.x:
+            if self.y > position.y:
+                return Direction.NORTH
+            elif self.y < position.y:
+                return Direction.SOUTH
+        elif self.y == position.y:
+            if self.x < position.x:
+                return Direction.EAST
+            elif self.x > position.x:
+                return Direction.WEST
+        else:
+            print("Inavlid input to direction of")
+            print(str(self) + ' and ' + str(position))
     
     def __add__(self, o):
         return Position(self.x + o.x, self.y + o.y)
@@ -58,6 +74,9 @@ class Position:
     
     def __eq__(self, o):
         return self.x == o.x and self.y == o.y
+    
+    def __hash__(self):
+        return int(0.5 * ((self.x + self.y) * (self.x + self.y + 1)) + self.y)
     
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ')'

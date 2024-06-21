@@ -7,7 +7,7 @@ class Snake:
         self.positions = [starting_position, starting_position - Position(1, 0), starting_position - Position(2, 0)]
 
     def updateDirection(self, new_direction):
-        if new_direction != self.last_direction_moved.opposite():
+        if new_direction != None and new_direction != self.last_direction_moved.opposite():
             self.direction = new_direction
 
     # returns if he ate
