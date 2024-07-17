@@ -3,8 +3,8 @@ from pygame.locals import *
 
 class Direction(Enum):
     NORTH = 0
-    SOUTH = 1
-    EAST = 2
+    EAST = 1
+    SOUTH = 2
     WEST = 3
 
     def direction_from_key(key):
@@ -20,15 +20,85 @@ class Direction(Enum):
             return None
 
     def opposite(self):
-        if self == Direction.NORTH:
-            return Direction.SOUTH
-        elif self == Direction.SOUTH:
-            return Direction.NORTH
-        elif self == Direction.EAST:
-            return Direction.WEST
-        elif self == Direction.WEST:
-            return Direction.EAST
-            
+        return Direction((self.value + 2) % 4)
+        
+    def left_turn(self):
+        return Direction((self.value - 1) % 4)
+        
+    def right_turn(self):
+        return Direction((self.value + 1) % 4)
+
+class State():
+    num_possible = 512
+    def __init__(
+            self, 
+            direction: Direction = None, 
+            danger_straight: bool = None, 
+            danger_right: bool = None, 
+            danger_left: bool = None, 
+            food_north: bool = None, 
+            food_south: bool = None, 
+            food_east: bool = None, 
+            food_west: bool = None,
+            state_int: int = None
+        ):
+        if state_int == None:
+            self.direction = direction
+            self.danger_straight = danger_straight
+            self.danger_right = danger_right
+            self.danger_left = danger_left
+            self.food_north = food_north
+            self.food_south = food_south
+            self.food_east = food_east
+            self.food_west = food_west
+        else:
+            binary_state = bin(state_int)
+            self.direction = Direction(int(binary_state[2:4], base=2))
+            self.danger_straight = binary_state[4:5] == '1'
+            self.danger_right = binary_state[5:6] == '1'
+            self.danger_left = binary_state[6:7] == '1'
+            self.food_north = binary_state[7:8] == '1'
+            self.food_south = binary_state[8:9] == '1'
+            self.food_east = binary_state[9:10] == '1'
+            self.food_west = binary_state[10:11] == '1'
+
+    def get_int(self):
+        return int(
+                str(bin(self.direction.value)) + 
+                str(int(self.danger_straight)) +
+                str(int(self.danger_right)) +
+                str(int(self.danger_left)) +
+                str(int(self.food_north)) +
+                str(int(self.food_south)) +
+                str(int(self.food_east)) +
+                str(int(self.food_west)),
+                base = 2
+            )
+    
+    def __str__(self):
+        return "\ndirection: " + str(self.direction) +\
+                "\ndanger straight: " + str(int(self.danger_straight)) +\
+                "\ndanger right: " + str(int(self.danger_right)) +\
+                "\ndanger left: " + str(int(self.danger_left)) +\
+                "\nfood north: " + str(int(self.food_north)) +\
+                "\nfood south: " + str(int(self.food_south)) +\
+                "\nfood east: " + str(int(self.food_east)) +\
+                "\nfood west: " + str(int(self.food_west)) + "\n"
+
+
+class Actions(Enum):
+    STRAIGHT = 0
+    RIGHT = 1
+    LEFT = 2
+
+    def apply_to_direction(self, direction: Direction):
+        if self == Actions.STRAIGHT:
+            return direction
+        elif self == Actions.RIGHT:
+            return direction.right_turn()
+        elif self == Actions.LEFT:
+            return direction.left_turn()
+        
 
 class GameColor(Enum):
     SNAKE = (0, 255, 0)

@@ -5,10 +5,10 @@ import pygame
 from pygame.locals import *
 
 SQUARE_SIZE = 20
-BOARD_WIDTH = 30
-BOARD_HEIGHT = 30
-STARTING_POSITION = Position(20,20)
-FOOD_STARTING_POSITION = Position(25, 20)
+BOARD_WIDTH = 10
+BOARD_HEIGHT = 10
+STARTING_POSITION = Position(5,5)
+FOOD_STARTING_POSITION = Position(8, 5)
 
 class Board:
     def __init__(self,snake: Snake):
@@ -22,16 +22,15 @@ class Board:
             position = Position(random.randint(0, BOARD_WIDTH - 1), random.randint(0, BOARD_HEIGHT - 1))
         return position
     
-    def get_next_positions(self, position: Position) -> Position:
+    def get_possible_next_positions(self, position: Position) -> Position:
         next_positions = []
         for direction in [Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST]:
             next = position.next(direction)
-            if self.containes_position(next) and next not in self.snake.positions:
+            if self.contains_position(next) and next not in self.snake.positions:
                 next_positions.append(next)
-        # print("Next positions for " + str(position) + "are: " + str([str(p) for p in next_positions]))
         return next_positions
 
-    def containes_position(self, p: Position) -> bool:
+    def contains_position(self, p: Position) -> bool:
         return p.x >= 0 and p.x < BOARD_WIDTH and p.y >= 0 and p.y < BOARD_HEIGHT
 
     def show_board(self, food_position, path):
