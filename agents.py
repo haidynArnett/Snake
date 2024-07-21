@@ -206,19 +206,3 @@ class QLearningAgent(Player):
         print("results: " + str(results))
         print("Max: " + str(max(results)))
 
-class DQN(tf.keras.Model):
-    def __init__(self, num_actions):
-        super(DQN, self).__init_()
-        self.dense1 = keras.layers.Dense(124, activation='relu')
-        self.dense2 = keras.layers.Dense(36, activation='relu')
-        self.output_layer = keras.layers.Dense(num_actions, activation='linear')
-    
-    def call(self, inputs):
-        x = self.dense1(inputs)
-        x = self.dense2(x)
-        return self.output_layer(x)
-
-class DeepQLearningAgent(QLearningAgent):
-    def __init__(self, snake: Snake, board: Board):
-        super.__init__(self, snake, board)
-        self.q_table = None
