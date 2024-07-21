@@ -4,7 +4,7 @@ import random
 import pygame
 from pygame.locals import *
 
-SQUARE_SIZE = 20
+SQUARE_SIZE = 40
 BOARD_WIDTH = 10
 BOARD_HEIGHT = 10
 STARTING_POSITION = Position(5,5)
