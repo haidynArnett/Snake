@@ -6,7 +6,9 @@ class Snake:
 
     def reset(self, position: Position, direction: Direction):
         self.direction = direction
+        # self.positions = [position]
         self.positions = [position, position - Position(1, 0), position - Position(2, 0)]
+        # self.positions = [position, position - Position(1, 0), position - Position(2, 0), position - Position(3, 0), position - Position(4, 0)]
 
     def updateDirection(self, new_direction):
         if new_direction != None and new_direction != self.direction.opposite():

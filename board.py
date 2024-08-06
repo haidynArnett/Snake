@@ -9,6 +9,8 @@ BOARD_WIDTH = 10
 BOARD_HEIGHT = 10
 STARTING_POSITION = Position(5,5)
 FOOD_STARTING_POSITION = Position(8, 5)
+# STARTING_POSITION = Position(1, 2)
+# FOOD_STARTING_POSITION = Position(3, 3)
 
 class Board:
     def __init__(self,snake: Snake):

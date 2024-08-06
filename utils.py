@@ -1,5 +1,8 @@
 from enum import Enum
 from pygame.locals import *
+import numpy as np
+import tensorflow as tf
+import torch
 
 class Direction(Enum):
     NORTH = 0
@@ -62,7 +65,7 @@ class State():
             self.food_east = binary_state[9:10] == '1'
             self.food_west = binary_state[10:11] == '1'
 
-    def get_int(self):
+    def __int__(self):
         return int(
                 str(bin(self.direction.value)) + 
                 str(int(self.danger_straight)) +
@@ -74,6 +77,37 @@ class State():
                 str(int(self.food_west)),
                 base = 2
             )
+    
+    def __index__(self):
+        return int(self)
+    
+    
+    def tensor_version(self):
+        # tensor_version = tf.constant([
+        #         self.direction.value == Direction.NORTH,
+        #         self.direction.value == Direction.EAST,
+        #         self.direction.value == Direction.SOUTH,
+        #         self.direction.value == Direction.WEST,
+        #         self.danger_straight,
+        #         self.danger_right,
+        #         self.danger_left,
+        #         self.food_north,
+        #         self.food_south,
+        #         self.food_east,
+        #         self.food_west
+        #     ])
+        tensor_version = np.array([
+            self.direction.value,
+            self.danger_straight,
+            self.danger_right,
+            self.danger_left,
+            self.food_north,
+            self.food_south,
+            self.food_east,
+            self.food_west
+        ], dtype=int)
+        return torch.tensor(tensor_version, dtype=torch.float)
+    
     
     def __str__(self):
         return "\ndirection: " + str(self.direction) +\
